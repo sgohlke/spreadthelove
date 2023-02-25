@@ -28,12 +28,22 @@ function sendEventsToAll(newMessage: string): void {
 }
 
 function handleRequest(request: Request): Response {
+   const responseHeaders = new Headers();
+   const origin = request.headers.get('origin');
+   if (origin) {
+      responseHeaders.set('Access-Control-Allow-Origin', origin);
+   }
+
    let clientId: number
    const { pathname } = new URL(request.url);
-   if (pathname.includes('/spreadlove')) {
+
+   if (request.method === 'OPTIONS') {
+      return new Response(undefined, { headers: responseHeaders });
+   } else if (pathname.includes('/spreadlove')) {
       sendEventsToAll('Someone shared some ❤️');
+      responseHeaders.set('content-type', 'application/json; charset=UTF-8');
       return new Response(JSON.stringify({ message: 'You spread some ❤️' }), {
-         headers: { 'content-type': 'application/json; charset=UTF-8' },
+         headers: responseHeaders,
       });
    } else if (pathname.includes('/getlove')) {
       const body = new ReadableStream({
@@ -51,12 +61,14 @@ function handleRequest(request: Request): Response {
          },
       });
 
+      responseHeaders.set('content-type', 'text/event-stream');
       return new Response(body, {
-         headers: { 'content-type': 'text/event-stream' },
+         headers: responseHeaders,
          status: 200,
       });
    }
 
+   responseHeaders.set('content-type', 'text/html; charset=UTF-8');
    return new Response(
       `
     <html>
@@ -86,7 +98,7 @@ function handleRequest(request: Request): Response {
     
     `,
       {
-         headers: { 'content-type': 'text/html; charset=UTF-8' },
+         headers: responseHeaders,
       },
    );
 }
