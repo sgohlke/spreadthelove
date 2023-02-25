@@ -7,6 +7,14 @@ const clients: Array<{
    controller: ReadableStreamDefaultController;
 }> = [];
 
+
+function removeClient(clientId: number) {
+   const indexToRemove = clients.findIndex( element => element.id === clientId )
+      if (indexToRemove && indexToRemove >= 0) {
+         clients.splice(indexToRemove, 1)
+      }
+}
+
 function sendEventsToAll(newMessage: string): void {
    for (const client of clients) {
       try {
@@ -14,12 +22,13 @@ function sendEventsToAll(newMessage: string): void {
             new TextEncoder().encode(`data: ${newMessage}\r\n\r\n`),
          );
       } catch (error) {
-         console.log('An error ocurred when sending an event', error);
+         console.log('An error ocurred when sending an event.', error);
       }
    }
 }
 
 function handleRequest(request: Request): Response {
+   let clientId: number
    const { pathname } = new URL(request.url);
    if (pathname.includes('/spreadlove')) {
       sendEventsToAll('Someone shared some ❤️');
@@ -29,14 +38,16 @@ function handleRequest(request: Request): Response {
    } else if (pathname.includes('/getlove')) {
       const body = new ReadableStream({
          start(controller: ReadableStreamDefaultController): void {
-            const clientId = Date.now();
+            const newClientId = Date.now();
             const newClient = {
-               id: clientId,
+               id: newClientId,
                controller,
             };
             clients.push(newClient);
+            clientId = newClientId
          },
          cancel(): void {
+            removeClient(clientId)
          },
       });
 
