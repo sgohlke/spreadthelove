@@ -1,18 +1,17 @@
-import { serve } from './deps.ts';
+import { returnDataResponse, startServer } from './deps.ts'
 
-const port = 3018;
+const port = 3018
 
 const clients: Array<{
-   id: number;
-   controller: ReadableStreamDefaultController;
-}> = [];
-
+   id: number
+   controller: ReadableStreamDefaultController
+}> = []
 
 function removeClient(clientId: number) {
-   const indexToRemove = clients.findIndex( element => element.id === clientId )
-      if (indexToRemove && indexToRemove >= 0) {
-         clients.splice(indexToRemove, 1)
-      }
+   const indexToRemove = clients.findIndex((element) => element.id === clientId)
+   if (indexToRemove && indexToRemove >= 0) {
+      clients.splice(indexToRemove, 1)
+   }
 }
 
 function sendEventsToAll(newMessage: string): void {
@@ -20,55 +19,56 @@ function sendEventsToAll(newMessage: string): void {
       try {
          client.controller.enqueue(
             new TextEncoder().encode(`data: ${newMessage}\r\n\r\n`),
-         );
+         )
       } catch (error) {
-         console.log('An error ocurred when sending an event.', error);
+         console.log('An error ocurred when sending an event.', error)
       }
    }
 }
 
 function handleRequest(request: Request): Response {
-   const responseHeaders = new Headers();
-   const origin = request.headers.get('origin');
+   const responseHeaders = new Headers()
+   const origin = request.headers.get('origin')
    if (origin) {
-      responseHeaders.set('Access-Control-Allow-Origin', origin);
+      responseHeaders.set('Access-Control-Allow-Origin', origin)
    }
 
    let clientId: number
-   const { pathname } = new URL(request.url);
+   const { pathname } = new URL(request.url)
 
    if (request.method === 'OPTIONS') {
-      return new Response(undefined, { headers: responseHeaders });
+      return new Response(undefined, { headers: responseHeaders })
    } else if (pathname.includes('/spreadlove')) {
-      sendEventsToAll('Someone shared some ❤️');
-      responseHeaders.set('content-type', 'application/json; charset=UTF-8');
-      return new Response(JSON.stringify({ message: 'You spread some ❤️' }), {
-         headers: responseHeaders,
-      });
+      sendEventsToAll('Someone shared some ❤️')
+      responseHeaders.set('content-type', 'application/json; charset=UTF-8')
+      return returnDataResponse(
+         { message: 'You spread some ❤️' },
+         responseHeaders,
+      )
    } else if (pathname.includes('/getlove')) {
       const body = new ReadableStream({
          start(controller: ReadableStreamDefaultController): void {
-            const newClientId = Date.now();
+            const newClientId = Date.now()
             const newClient = {
                id: newClientId,
                controller,
-            };
-            clients.push(newClient);
+            }
+            clients.push(newClient)
             clientId = newClientId
          },
          cancel(): void {
             removeClient(clientId)
          },
-      });
+      })
 
-      responseHeaders.set('content-type', 'text/event-stream');
+      responseHeaders.set('content-type', 'text/event-stream')
       return new Response(body, {
          headers: responseHeaders,
          status: 200,
-      });
+      })
    }
 
-   responseHeaders.set('content-type', 'text/html; charset=UTF-8');
+   responseHeaders.set('content-type', 'text/html; charset=UTF-8')
    return new Response(
       `
     <html>
@@ -100,7 +100,7 @@ function handleRequest(request: Request): Response {
       {
          headers: responseHeaders,
       },
-   );
+   )
 }
 
-serve(handleRequest, { port: port });
+startServer(handleRequest, { port: port })
