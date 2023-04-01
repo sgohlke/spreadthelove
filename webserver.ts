@@ -1,6 +1,7 @@
 import { returnDataResponse, startServer } from './deps.ts'
 
 const port = 3018
+let numberOfHearts = 0
 
 const clients: Array<{
    id: number
@@ -33,13 +34,15 @@ function handleRequest(request: Request): Response {
       responseHeaders.set('Access-Control-Allow-Origin', origin)
    }
 
+
    let clientId: number
    const { pathname } = new URL(request.url)
 
    if (request.method === 'OPTIONS') {
       return new Response(undefined, { headers: responseHeaders })
    } else if (pathname.includes('/spreadlove')) {
-      sendEventsToAll('Someone shared some ❤️')
+      numberOfHearts++
+      sendEventsToAll(`Someone shared some ❤️, we now have ${numberOfHearts} ❤️s`)
       responseHeaders.set('content-type', 'application/json; charset=UTF-8')
       return returnDataResponse(
          { message: 'You spread some ❤️' },
