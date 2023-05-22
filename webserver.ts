@@ -34,8 +34,6 @@ function handleRequest(request: Request): Response {
       responseHeaders.set('Access-Control-Allow-Origin', origin)
    }
 
-
-   let clientId: number
    const { pathname } = new URL(request.url)
 
    if (request.method === 'OPTIONS') {
@@ -49,6 +47,7 @@ function handleRequest(request: Request): Response {
          responseHeaders,
       )
    } else if (pathname.includes('/getlove')) {
+      let clientId: number
       const body = new ReadableStream({
          start(controller: ReadableStreamDefaultController): void {
             const newClientId = Date.now()
