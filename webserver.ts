@@ -88,14 +88,14 @@ function handleRequest(request: Request): Response {
     <body>
     <script>
     function spreadlove() {
-      fetch('spreadlove').then( response => {}).catch( error => {})
+      fetch('https://spreadthelove.deno.dev/spreadlove').then( response => {}).catch( error => {})
     }
     </script>
     <h1>Spread some love ❤️</h1>
     <input type='button' value='Spread some love!' onclick='spreadlove()'>
     <div id="hearts"></div>
     <script>
-    const evtSource = new EventSource("getlove");
+    const evtSource = new EventSource("https://spreadthelove.deno.dev/getlove");
     var hearts = document.getElementById('hearts');
     evtSource.onmessage = (event) => {
       var item = document.createElement('span');
