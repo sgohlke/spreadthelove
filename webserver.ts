@@ -9,8 +9,7 @@ const clients: Array<{
 }> = []
 
 const channel = new BroadcastChannel("love")
-channel.onmessage = (event: MessageEvent) => {
-   console.log('Got broadcast message', JSON.stringify(event))
+channel.onmessage = () => {
    numberOfHearts++
    sendEventsToAll(`Someone shared some ❤️, we now have ${numberOfHearts} ❤️s`)
  };
