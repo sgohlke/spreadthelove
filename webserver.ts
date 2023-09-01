@@ -8,6 +8,13 @@ const clients: Array<{
    controller: ReadableStreamDefaultController
 }> = []
 
+const channel = new BroadcastChannel("love")
+channel.onmessage = (event: MessageEvent) => {
+   console.log('Got broadcast message', JSON.stringify(event))
+   numberOfHearts++
+   sendEventsToAll(`Someone shared some ❤️, we now have ${numberOfHearts} ❤️s`)
+ };
+
 function removeClient(clientId: number) {
    const indexToRemove = clients.findIndex((element) => element.id === clientId)
    if (indexToRemove && indexToRemove >= 0) {
@@ -40,7 +47,9 @@ function handleRequest(request: Request): Response {
       return new Response(undefined, { headers: responseHeaders })
    } else if (pathname.includes('/spreadlove')) {
       numberOfHearts++
-      sendEventsToAll(`Someone shared some ❤️, we now have ${numberOfHearts} ❤️s`)
+      const message = `Someone shared some ❤️, we now have ${numberOfHearts} ❤️s` 
+      sendEventsToAll(message)
+      channel.postMessage(message);
       responseHeaders.set('content-type', 'application/json; charset=UTF-8')
       return returnDataResponse(
          { message: 'You spread some ❤️' },
