@@ -97,10 +97,11 @@ function handleRequest(request: Request): Response {
     const evtSource = new EventSource("getlove");
     var hearts = document.getElementById('hearts');
     evtSource.onmessage = (event) => {
-      var item = document.createElement('span');
-      item.innerHTML = event.data + '<br>';
-      hearts.appendChild(item);
-      window.scrollTo(0, document.body.scrollHeight);
+      // var item = document.createElement('span');
+      // item.innerHTML = event.data + '<br>';
+      // hearts.appendChild(item);
+      // window.scrollTo(0, document.body.scrollHeight);
+      hearts.innerHTML = '<span>'+ event.data + '</span>';
     }
     </script>
     </body>
