@@ -1,3 +1,3 @@
 # spreadthelove
 
-spreadthelove api and app in Deno
+spreadthelove api and app in Deno.
