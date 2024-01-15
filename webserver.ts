@@ -1,4 +1,4 @@
-import { returnDataResponse, startServer } from './deps.ts'
+import { returnDataResponse } from './deps.ts'
 
 const port = 3018
 let numberOfHearts = 0
@@ -118,4 +118,4 @@ function handleRequest(request: Request): Response {
    )
 }
 
-startServer(handleRequest, { port: port })
+Deno.serve({ port: port }, handleRequest)
