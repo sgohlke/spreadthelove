@@ -1,7 +1,7 @@
 {
   "version": "3",
   "remote": {
-    "https://raw.githubusercontent.com/sgohlke/deno-web/8.2.0/response/ResponseHeaders.ts": "fdddfe3f682247d504107c63ef4bd5179127210f97c5d1979ff876ee4cc28db2",
-    "https://raw.githubusercontent.com/sgohlke/deno-web/8.2.0/response/responseFunctions.ts": "009b01e1b76e78ab93bb68f5d9256e23d471b53b150ac917199aef8e97208d99"
+    "https://raw.githubusercontent.com/sgohlke/deno-web/8.2.1/response/ResponseHeaders.ts": "fdddfe3f682247d504107c63ef4bd5179127210f97c5d1979ff876ee4cc28db2",
+    "https://raw.githubusercontent.com/sgohlke/deno-web/8.2.1/response/responseFunctions.ts": "009b01e1b76e78ab93bb68f5d9256e23d471b53b150ac917199aef8e97208d99"
   }
 }
