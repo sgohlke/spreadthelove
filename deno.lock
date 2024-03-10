@@ -1,7 +1,14 @@
 {
   "version": "3",
-  "remote": {
-    "https://raw.githubusercontent.com/sgohlke/deno-web/8.2.1/response/ResponseHeaders.ts": "fdddfe3f682247d504107c63ef4bd5179127210f97c5d1979ff876ee4cc28db2",
-    "https://raw.githubusercontent.com/sgohlke/deno-web/8.2.1/response/responseFunctions.ts": "009b01e1b76e78ab93bb68f5d9256e23d471b53b150ac917199aef8e97208d99"
-  }
+  "packages": {
+    "specifiers": {
+      "jsr:@sgohlke/deno-web@^8.2.3": "jsr:@sgohlke/deno-web@8.2.3"
+    },
+    "jsr": {
+      "@sgohlke/deno-web@8.2.3": {
+        "integrity": "9a506a0b12719c5095485a1bfd108d292ab9edd5f2381a254a98298f27297cbb"
+      }
+    }
+  },
+  "remote": {}
 }
